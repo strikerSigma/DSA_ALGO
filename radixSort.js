@@ -1,18 +1,3 @@
-function countCharacterOccurrences(str) {
-  const charCount = {};
-  for (let i = 0; i < str.length; i++) {
-    const char = str.toLowerCase().charAt(i);
-    if ((char >= 'a' && char <= 'z') || !isNaN(parseInt(char))) {
-      if (charCount[char]) {
-        charCount[char]++;
-      } else {
-        charCount[char] = 1;
-      }
-    }
-  }
-
-  return charCount;
-}
 function getDigit(num, place) {
     return Math.floor(Math.abs(num) / Math.pow(10, place)) % 10;
 }
