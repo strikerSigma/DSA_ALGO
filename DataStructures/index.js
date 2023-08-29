@@ -1,124 +1,67 @@
-class Node {
-    constructor(val){
-        this.val = val;
-        this.next = null;
-    }
-}
-class SinglyLinkedList {
+class MaxBinaryHeap {
     constructor(){
-        this.head = null;
-        this.tail = null;
-        this.length = 0;
+        this.values = [];
     }
-    push(val){
-        var newNode = new Node(val);
-        if(!this.head){
-            this.head = newNode;
-            this.tail = this.head;
-        }else
-        {
-        this.tail.next = newNode
-        this.tail = newNode
+    insert(element){
+        this.values.push(element);
+        this.bubbleUp();
+        return this.values;
+    }
+    bubbleUp(){
+        let idx = this.values.length - 1;
+        const element = this.values[idx];
+        while(idx > 0){
+            let parentIdx = Math.floor((idx - 1)/2);
+            let parent = this.values[parentIdx];
+            if(element <= parent) break;
+            this.values[parentIdx] = element;
+            this.values[idx] = parent;
+            idx = parentIdx;
         }
-        this.length++;
-        return true;
     }
-    pop(){
-        var current = this.head;
-        if(!current){return undefined}
-        var newTail = current
-        while(current.next){
-            newTail = current;
-            current = current.next;
+
+    extractMax(){
+    const max =  this.values[0];
+    const end = this.values.pop();
+    if(this.values.length>0) {
+        this.values[0] = end;
+        this.sinkDown();
+    }
+    return max;
+}
+    sinkDown(){
+        let idx = 0;
+        const length = this.values.length;
+        let element = this.values[0];
+            console.log("array:",this.values)
+        while(true){
+            let leftChildIdx = 2*idx +1;
+            let rightChildIdx = 2*idx +2;
+            let leftChild,rightChild;
+            let swap = null;
+            if(leftChildIdx < length){
+                leftChild=  this.values[leftChildIdx];
+                if(leftChild>element) swap = leftChild
+            }
+            if(rightChildIdx < length){
+                rightChild=  this.values[rightChildIdx];
+                if((rightChild>element && swap ===null)|| (swap!==null && rightChild>leftChild)) swap = rightChild
+            }
+            if(swap==null) break;
+            this.values[idx] = this.values[swap]
+            this.values[swap] = element;
+            idx = swap;
+            
         }
-        newTail.next = null;
-        this.tail = newTail;
-        this.length--;
-        if(this.length === 0){this.head = null, this.tail = null}
-        return current;
-    }
-    shift(){
-        if(!this.head)return undefined;
-        var currentHead = this.head;
-        this.head = currentHead.next;
-        this.length--;
-    }
-    unShift(val){
-       var newNode = new Node(val);
-       if(!this.head){
-            this.head = newNode;
-            this.tail = this.head;
-            return newNode;
-        }
-        const currentHead = this.head;
-        this.head = newNode;
-        this.head.next = currentHead;
-        return newNode;
-    }
-    get(index){
-        if(index < 0 || index >= this.length) return undefined;
-        var current = this.head;
-        let count = 0
-        while(count !== index){
-            current = current.next;
-            count++;
-        }
-        return current;
-    }
-    set(index, val){
-        var foundNode = get(index);
-        if(foundNode) {
-            foundNode.val = val;
-            return true;
-        }
-        return false;
-    }
-    insert(index, val){
-        if(index <0 || index>this.length ) return false;
-        if(index === this.length) return this.push(val);
-        if(index === 0){ this.unShift(val); return true;}
-        var currentIndex = this.get(index-1);
-        var currentPointer = currentIndex.next;
-        var newNode = new Node(val);
-        currentIndex.next = newNode;
-        newNode.next = currentPointer;
-        this.length++;
-        return true;
-    }
-    remove(index){
-         if(index <0 || index>=this.length ) return false;
-         if(index === this.length-1) { this.pop(); return true;}
-         if(index === 0) { this.shift(); return true;}
-         var prev = this.get(index-1);
-         var current = prev.next;
-         current.val = null;
-         var next = current.next;
-         current.next = null;
-         prev.next = next;
-         this.length--;
-         return true;
-    }
-    reverse(){
-        var length = this.length;
-        for(var i=0; i<length; i++){
-            var lastElement = this.pop();
-            this.unShift(lastElement.val)
-        }
-        return "list reversed!";
     }
 }
-const list = new SinglyLinkedList();
-list.push("O hi there");
-list.push(" Ibrahim");
-list.push(" how ");
-list.push(" are");
-list.push(" you?");
-// console.log(list.shift())
-// console.log(list.pop());
-// console.log(list.unShift('yo'))
-// console.log(list.get(2));
-list.insert(2,"damn yo")
-console.log(list.get(2))
-// console.log(list.remove(2));
-console.log(list.reverse())
-console.log(list)
+const newHeap = new MaxBinaryHeap();
+console.log(newHeap.insert(55))
+console.log(newHeap.insert(5))
+console.log(newHeap.insert(65))
+console.log(newHeap.insert(10))
+console.log(newHeap.insert(4))
+console.log(newHeap.insert(13))
+console.log(newHeap.extractMax())
+console.log(newHeap.extractMax())
+console.log(newHeap.extractMax())
